@@ -14,6 +14,7 @@ import {
   setToken,
   setSupportedSourceTokens,
   setSupportedDestTokens,
+  setTransferRoute,
 } from '../../store/transferInput';
 import { wh, isAcceptedToken, toChainId } from '../../utils/sdk';
 import { CHAINS, TOKENS, TOKENS_ARR } from '../../config';
@@ -35,6 +36,7 @@ import SwapNetworks from './SwapNetworks';
 import RouteOptions from './RouteOptions';
 import Operator from '../../utils/routes';
 import { TokenConfig } from '../../config/types';
+import { isCosmWasmChain } from '../../utils/cosmos';
 
 const useStyles = makeStyles()((theme) => ({
   spacer: {
@@ -57,9 +59,12 @@ const useStyles = makeStyles()((theme) => ({
   },
 }));
 
-function isSupportedToken(token: string, supportedTokens: TokenConfig[]): boolean {
+function isSupportedToken(
+  token: string,
+  supportedTokens: TokenConfig[],
+): boolean {
   if (!token) return true;
-  return supportedTokens.some(t => t.key === token);
+  return supportedTokens.some((t) => t.key === token);
 }
 
 function Bridge() {
@@ -144,11 +149,21 @@ function Bridge() {
 
   // check if automatic relay option is available
   useEffect(() => {
-    if (!fromNetwork || !toNetwork || !token) return;
-    const fromConfig = CHAINS[fromNetwork]!;
-    const toConfig = CHAINS[toNetwork]!;
-    if (fromConfig.automaticRelayer && toConfig.automaticRelayer) {
-      const isTokenAcceptedForRelay = async () => {
+    const establishRoute = async () => {
+      if (!fromNetwork || !toNetwork || !token) return;
+      const fromConfig = CHAINS[fromNetwork]!;
+      const toConfig = CHAINS[toNetwork]!;
+
+      if (
+        !isCosmWasmChain(wh.toChainId(fromNetwork)) &&
+        isCosmWasmChain(wh.toChainId(toNetwork))
+      ) {
+        dispatch(setTransferRoute(Route.COSMOS_GATEWAY));
+        return;
+      }
+
+      // check if automatic relay option is available
+      if (fromConfig.automaticRelayer && toConfig.automaticRelayer) {
         const tokenConfig = TOKENS[token]!;
         const tokenId = getWrappedTokenId(tokenConfig);
         const accepted = await isAcceptedToken(tokenId);
@@ -157,11 +172,11 @@ function Bridge() {
         } else {
           dispatch(disableAutomaticTransfer());
         }
-      };
-      isTokenAcceptedForRelay();
-    } else {
-      dispatch(disableAutomaticTransfer());
-    }
+      } else {
+        dispatch(disableAutomaticTransfer());
+      }
+    };
+    establishRoute();
   }, [fromNetwork, toNetwork, token, dispatch]);
 
   useEffect(() => {

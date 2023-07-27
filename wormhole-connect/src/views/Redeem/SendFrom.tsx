@@ -35,7 +35,7 @@ const getRows = (txData: any): RowsData => {
   const token = TOKENS[txData.tokenKey];
 
   // manual transfers
-  if (type === Route.BRIDGE) {
+  if (type === Route.BRIDGE || type === Route.COSMOS_GATEWAY) {
     return [
       {
         title: 'Amount',

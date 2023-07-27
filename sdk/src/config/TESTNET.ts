@@ -16,6 +16,7 @@ export const TESTNET_CHAINS = {
   sui: 21,
   aptos: 22,
   sei: 32,
+  wormchain: 3104,
 } as const;
 
 /**
@@ -159,6 +160,17 @@ const TESTNET: { [chain in TestnetChainName]: ChainConfig } = {
     finalityThreshold: 0,
     nativeTokenDecimals: 6,
   },
+  wormchain: {
+    context: Context.COSMOS,
+    key: 'wormchain',
+    id: 3104,
+    contracts: {
+      ...CONTRACTS.TESTNET.wormchain,
+      ibcShimContract: '',
+    },
+    finalityThreshold: 0,
+    nativeTokenDecimals: 6,
+  },
 };
 
 const env: Environment = 'TESTNET';
@@ -179,6 +191,7 @@ const TESTNET_CONFIG: WormholeConfig = {
     sui: 'https://fullnode.testnet.sui.io',
     aptos: 'https://fullnode.testnet.aptoslabs.com/v1',
     sei: 'https://rpc.atlantic-2.seinetwork.io',
+    wormchain: '',
   },
   rest: {
     sei: 'https://rest.atlantic-2.seinetwork.io',

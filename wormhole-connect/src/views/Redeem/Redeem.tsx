@@ -7,12 +7,14 @@ import {
   setVaa,
 } from '../../store/redeem';
 import { RootState } from '../../store';
-import { wh, ParsedMessage, ParsedRelayerMessage } from '../../utils/sdk';
+import { ParsedMessage, ParsedRelayerMessage } from '../../utils/sdk';
 import PageHeader from '../../components/PageHeader';
 import Spacer from '../../components/Spacer';
 import NetworksTag from './Tag';
 import Stepper from './Stepper';
 import GovernorEnqueuedWarning from './GovernorEnqueuedWarning';
+import { Route } from '../../store/transferInput';
+import Operator from '../../utils/routes';
 
 class Redeem extends React.Component<
   {
@@ -22,6 +24,7 @@ class Redeem extends React.Component<
     txData: ParsedMessage | ParsedRelayerMessage;
     transferComplete: boolean;
     isVaaEnqueued: boolean;
+    route: Route;
   },
   {
     vaa: ParsedVaa | undefined;
@@ -67,7 +70,8 @@ class Redeem extends React.Component<
 
   async getTransferComplete() {
     if (!this.state.vaa || !this.props.txData) return;
-    const isComplete = await wh.isTransferCompleted(
+    const isComplete = await new Operator().isTransferCompleted(
+      this.props.route,
       this.props.txData.toChain,
       this.state.vaa.bytes,
     );
@@ -124,9 +128,9 @@ class Redeem extends React.Component<
 }
 
 function mapStateToProps(state: RootState) {
-  const { txData, transferComplete, isVaaEnqueued } = state.redeem;
+  const { txData, transferComplete, isVaaEnqueued, route } = state.redeem;
 
-  return { txData, transferComplete, isVaaEnqueued };
+  return { txData, transferComplete, isVaaEnqueued, route };
 }
 
 const mapDispatchToProps = (dispatch) => {

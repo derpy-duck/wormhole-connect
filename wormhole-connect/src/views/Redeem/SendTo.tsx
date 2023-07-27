@@ -195,10 +195,10 @@ const getRows = async (
   receiveTx?: string,
   transferComplete?: boolean,
 ): Promise<RowsData> => {
-  if (txData.payloadID === Route.BRIDGE) {
-    return await getManualRows(txData, receiveTx);
+  if (txData.payloadID === Route.RELAY) {
+    return await getAutomaticRows(txData, receiveTx, transferComplete);
   }
-  return await getAutomaticRows(txData, receiveTx, transferComplete);
+  return await getManualRows(txData, receiveTx);
 };
 
 function SendTo() {
