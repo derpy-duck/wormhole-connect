@@ -50,7 +50,7 @@ export interface NetworkConfig extends ChainConfig {
   explorerUrl: string;
   explorerName: string;
   gasToken: string;
-  chainId: number;
+  chainId: number | string;
   icon: Icon;
   maxBlockSearch: number;
   automaticRelayer?: boolean;
@@ -78,6 +78,7 @@ export enum Icon {
   'SUI',
   'APT',
   'SEI',
+  'OSMO',
 }
 
 export type GasEstimates = {

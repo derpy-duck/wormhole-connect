@@ -6,8 +6,8 @@ import { ChainName } from '@wormhole-foundation/wormhole-connect-sdk';
 import { CHAINS_ARR } from '../config';
 import { getVaa } from '../utils/sdk';
 import Operator from '../utils/routes';
-import { setTxDetails, setRoute as setTransferRoute } from '../store/redeem';
-import { setRoute } from '../store/router';
+import { setTxDetails, setRoute as setRedeemRoute } from '../store/redeem';
+import { setRoute as setAppRoute } from '../store/router';
 import PageHeader from '../components/PageHeader';
 import Search from '../components/Search';
 import Button from '../components/Button';
@@ -69,8 +69,8 @@ function TxSearch() {
       const message = await operator.parseMessage(route, vaaInfo);
       setError('');
       dispatch(setTxDetails(message));
-      dispatch(setTransferRoute(route));
-      dispatch(setRoute('redeem'));
+      dispatch(setRedeemRoute(route));
+      dispatch(setAppRoute('redeem'));
     } catch (e) {
       console.error(e);
       setError(

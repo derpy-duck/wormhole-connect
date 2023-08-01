@@ -96,6 +96,8 @@ const mainnetRpcs = {
   sui: process.env.REACT_APP_SUI_RPC || conf.rpcs.sui,
   aptos: process.env.REACT_APP_APTOS_RPC || conf.rpcs.aptos,
   sei: process.env.REACT_APP_SEI_RPC || conf.rpcs.sei,
+  osmosis: process.env.REACT_APP_OSMOSIS_RPC || conf.rpcs.osmosis,
+  wormchain: process.env.REACT_APP_WORMCHAIN_RPC || conf.rpcs.wormchain,
 };
 const testnetRpcs = {
   goerli: process.env.REACT_APP_GOERLI_RPC || conf.rpcs.goerli,
@@ -109,6 +111,8 @@ const testnetRpcs = {
   sui: process.env.REACT_APP_SUI_TESTNET_RPC || conf.rpcs.sui,
   aptos: process.env.REACT_APP_APTOS_TESTNET_RPC || conf.rpcs.aptos,
   sei: process.env.REACT_APP_SEI_TESTNET_RPC || conf.rpcs.sei,
+  osmosis: process.env.REACT_APP_OSMOSIS_RPC || conf.rpcs.osmosis,
+  wormchain: process.env.REACT_APP_WORMCHAIN_RPC || conf.rpcs.wormchain,
 };
 const devnetRpcs = {
   ethereum: process.env.REACT_APP_ETHEREUM_RPC || conf.rpcs.ethereum,
@@ -171,4 +175,5 @@ export const TESTNET_TO_MAINNET_CHAIN_NAMES: {
   aptos: 'aptos',
   sei: 'sei',
   wormchain: 'wormchain',
+  osmosis: 'osmosis',
 };
